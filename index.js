@@ -93,9 +93,24 @@ app.get('/posts', function(request, response) {
                 </ul>
                 </div>
             `;                                              
-        console.log(output);
         response.send(output);
     })
+})
+
+
+// EXERCISE 5
+app.get('/new-post', function(request, response) {
+    response.send(`
+        <form action="/createPost" method="POST"><!-- why does it say method="POST" ?? -->
+          <p>
+            <input type="text" name="url" placeholder="Enter a URL to content">
+          </p>
+          <p>
+            <input type="text" name="title" placeholder="Enter the title of your content">
+          </p>
+          <button type="submit">Create!</button>
+        </form>
+    `)
 })
 
 
