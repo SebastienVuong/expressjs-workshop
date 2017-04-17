@@ -1,0 +1,9 @@
+div(id="posts")
+    h1 List of posts
+    ul(class="posts-list")
+        each val in posts
+            li(class="post-item")
+                h2(class="post-item_title")
+                    a(href= val.post_url) 
+                        = val.post_title
+                p= "Created by " + val.user.username

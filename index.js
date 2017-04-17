@@ -6,6 +6,8 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.set('view engine', 'pug');
+
 var connection = mysql.createPool({
     host     : 'localhost',
     user     : 'root', // CHANGE THIS :)
@@ -68,32 +70,31 @@ app.get('/calculator/:operation', function(request, response) {
 
 
 // EXERCISE 4
-app.get('/posts', function(request, response) {
+app.get('/posts0', function(request, response) {
     var RedditAPI = require('../reddit-nodejs-api/reddit.js');
     var myReddit = new RedditAPI(connection);
     myReddit.getAllPosts().then(function(result) {
         var output = 
-            `<div id="posts">
+            `
+            <div id="posts">
             <h1>List of posts</h1>
-            <ul class="posts-list">`;
+            <ul class="posts-list">
+            `;
         for (var i = 0; i < result.length; i++) {
-                output += 
-                `
-                <li class="post-item">
-                    <h2 class="post-item__title">
-                        <a href=` + result[i].post_url + `>` + result[i].post_title + `</a>
-                    </h2>
-                    <p>Created by ` + result[i].user.username + `</p>
-                </li>
-                `;
-            //console.log(temp + 'SINRIVER')
-            //output += 'a';
-            //console.log(output)
+            output += 
+            `
+            <li class="post-item">
+                <h2 class="post-item__title">
+                    <a href=` + result[i].post_url + `>` + result[i].post_title + `</a>
+                </h2>
+                <p>Created by ` + result[i].user.username + `</p>
+            </li>
+            `;
         }
         output +=
             `   
-                </ul>
-                </div>
+            </ul>
+            </div>
             `;                                              
         response.send(output);
     })
@@ -123,7 +124,28 @@ app.post('/createPost', function(request, response) {
     myReddit.createPost([1,request.body.title, request.body.url], 1/*subredditID*/).then(function(result) {
         response.redirect("posts")
     });
-    // console.log(request.body);
+})
+
+// EXERCISE 7
+app.get('/createContent', function(request, response) {
+    response.render('create-content');
+})
+app.get('/posts', function(request, response) {
+    var RedditAPI = require('../reddit-nodejs-api/reddit.js');
+    var myReddit = new RedditAPI(connection);
+    myReddit.getAllPosts().then(function(result) {
+        // var postTitles = [];
+        // var postUrls = [];
+        // var postUsernames = [];
+        var posts = []
+        for (var i = 0; i < result.length; i++) {
+            posts.push(result[i]);
+            // postTitles.push(result[i].post_title);
+            // postUrls.push(result[i].post_url);
+            // postUsernames.push(result[i].user.username);
+        }
+     response.render('post-list', {posts: posts});
+    });
 })
 
 
