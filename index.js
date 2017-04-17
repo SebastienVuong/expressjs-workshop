@@ -4,6 +4,8 @@ var mysql = require('promise-mysql');
 
 var app = express();
 
+app.use(bodyParser.urlencoded({extended: true}));
+
 var connection = mysql.createPool({
     host     : 'localhost',
     user     : 'root', // CHANGE THIS :)
@@ -79,7 +81,7 @@ app.get('/posts', function(request, response) {
                 `
                 <li class="post-item">
                     <h2 class="post-item__title">
-                        <a href="http://the.post.url.value/">` + result[i].post_title + `</a>
+                        <a href=` + result[i].post_url + `>` + result[i].post_title + `</a>
                     </h2>
                     <p>Created by ` + result[i].user.username + `</p>
                 </li>
@@ -111,6 +113,17 @@ app.get('/new-post', function(request, response) {
           <button type="submit">Create!</button>
         </form>
     `)
+})
+
+
+// EXERCISE 6
+app.post('/createPost', function(request, response) {
+    var RedditAPI = require('../reddit-nodejs-api/reddit.js');
+    var myReddit = new RedditAPI(connection);
+    myReddit.createPost([1,request.body.title, request.body.url], 1/*subredditID*/).then(function(result) {
+        response.redirect("posts")
+    });
+    // console.log(request.body);
 })
 
 
