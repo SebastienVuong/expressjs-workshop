@@ -126,6 +126,7 @@ app.post('/createPost', function(request, response) {
     });
 })
 
+
 // EXERCISE 7
 app.get('/createContent', function(request, response) {
     response.render('create-content');
@@ -147,7 +148,6 @@ app.get('/posts', function(request, response) {
      response.render('post-list', {posts: posts});
     });
 })
-
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */
 

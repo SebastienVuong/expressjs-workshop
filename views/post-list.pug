@@ -1,5 +1,10 @@
-div(id="posts")
-    h1 List of posts
+extends ./layout.pug
+
+block title
+    div(id="posts")
+        h1 List of posts
+        
+block content        
     ul(class="posts-list")
         each val in posts
             li(class="post-item")
